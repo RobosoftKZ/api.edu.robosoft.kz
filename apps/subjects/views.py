@@ -10,7 +10,7 @@ from apps.subjects.models import (
     Question, Subjects, SubjectChoices, WrongAnswer, Report, ReportMetrics, SubjectMetrics
 )
 from apps.subjects.serializers import QuestionSerializers, AnswerSubmissionSerializer, SubjectSerializer
-# from apps.subjects.services.generate_questions import openAI
+from apps.subjects.services.generate_questions import openAI
 from apps.subjects.tasks import generate_questions_for_user
 
 
@@ -75,13 +75,13 @@ class AnswerSubmissionView(APIView):
                 except Question.DoesNotExist:
                     continue
             # Отправка открытых вопросов на проверку в ChatGPT
-            # if open_questions:
-            #     gpt_responses = openAI.calculate_anwers(open_questions)
-            #     try:
-            #         count_of_ones = gpt_responses["marks"].count(1)
-            #         correct_answers_count += count_of_ones
-            #     except Exception as e:
-            #         logging.error(str(e))
+            if open_questions:
+                gpt_responses = openAI.calculate_anwers(open_questions)
+                try:
+                    count_of_ones = gpt_responses["marks"].count(1)
+                    correct_answers_count += count_of_ones
+                except Exception as e:
+                    logging.error(str(e))
 
             # Создание отчета
             report = Report.objects.create(user=request.user, subject=subject)
@@ -108,7 +108,7 @@ class AnswerSubmissionView(APIView):
                     report.metrics.add(report_metric)  # Связываем метрику с отчетом
                 except SubjectMetrics.DoesNotExist:
                     logging.error(f"Метрика {metric_name} не найдена.")
-            # report.delete()  # TODO: uncomment this
+            report.delete()
             return Response({"correct_answers_count": correct_answers_count}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
