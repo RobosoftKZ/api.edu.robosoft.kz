@@ -1,12 +1,17 @@
 from rest_framework import serializers
-from .models import RussianLanguage, Math
 
-class RussianLanguageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RussianLanguage
-        fields = '__all__'
+from .models import Question, WrongAnswer
 
-class MathSerializer(serializers.ModelSerializer):
+
+class WrongAnswerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Math
-        fields = '__all__'
+        model = WrongAnswer
+        fields = "__all__"
+
+
+class QuestionSerializers(serializers.ModelSerializer):
+    wrongs = WrongAnswerSerializer(many=True)
+
+    class Meta:
+        model = Question
+        fields = "__all__"

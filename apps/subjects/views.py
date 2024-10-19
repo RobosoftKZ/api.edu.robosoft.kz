@@ -1,22 +1,24 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from apps.subjects.services.generate_questions import OpenAIService
-from rest_framework import viewsets
-from .models import RussianLanguage
-from .serializers import RussianLanguageSerializer
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
-class RussianViewSet(viewsets.ModelViewSet):
-    queryset = RussianLanguage.objects.all()
-    serializer_class = RussianLanguageSerializer
+from apps.subjects.models import Question, Subjects, SubjectChoices
+from apps.subjects.serializers import QuestionSerializers
+from apps.subjects.tasks import generate_questions_for_user
 
-    def create(self,request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
-        
+class GenerateQuestionAPIView(generics.ListAPIView):
+    serializer_class = QuestionSerializers
+    queryset = Question.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Получаем subject_id из параметров запроса
+        subject_id = self.request.query_params.get('subject_id', None)
+        if subject_id is None:
+            subject = Subjects.objects.filter(slug=SubjectChoices.RUSSIAN).first()
+            if subject:
+                subject_id = subject.id
+        # Фильтруем вопросы по пользователю
+        queryset = Question.objects.filter(user=self.request.user, subject_id=subject_id)
+        generate_questions_for_user.delay(self.request.user.id)
+        return queryset
