@@ -27,14 +27,14 @@ def generate_questions_for_user(user_id, subject_id=None):
             metrics={},  # Передаем метрики, если это необходимо
             close_question_count=needed_questions  # Генерируем только недостающие вопросы
         )
-
         # Сохраняем сгенерированные вопросы в базу данных
         for q_key, q_value in generated_questions.items():
             question = Question(
                 user_id=user_id,
                 question=q_value['question'],
-                subject_id=q_value['topic'],
-                answer=q_value['answer_right']  # Сохраняем правильный ответ
+                subject_id=subject_id,
+                topic=q_value['topic'],
+                answer=q_value.get('answer_right', '')
             )
             question.save()  # Сохраняем вопрос
 

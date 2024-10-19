@@ -11,6 +11,8 @@ class WrongAnswerSerializer(serializers.ModelSerializer):
 
 class QuestionSerializers(serializers.ModelSerializer):
     wrongs = WrongAnswerSerializer(many=True)
+    subject_name = serializers.StringRelatedField(source="subject.name")
+    username = serializers.StringRelatedField(source="user.username")
 
     class Meta:
         model = Question
