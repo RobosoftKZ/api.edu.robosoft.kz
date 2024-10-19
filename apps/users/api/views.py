@@ -12,7 +12,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from apps.users.models import User
-from .serializers import UserSerializer, UsernameSerializer
+from .serializers import UserSerializer, UsernameSerializer, RegisterSerializer
 
 
 class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
@@ -50,8 +50,10 @@ class UsernameCheckerAPIView(APIView):
 
 
 class LoginRegisterAPIView(APIView):
+    serializer_class = RegisterSerializer
+
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = RegisterSerializer(data=request.data)
 
         if serializer.is_valid():
             username = serializer.validated_data['username']
