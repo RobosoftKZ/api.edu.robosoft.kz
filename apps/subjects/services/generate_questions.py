@@ -1,6 +1,6 @@
 import json
 
-from apps.subjects.adapters.gpt_client import client as gpt_client
+from apps.subjects.adapters.gpt_client import client as gpt_client, text_open_question_answers
 from apps.subjects.adapters.gpt_client import (
     get_prompt_for_getting_answer_quality
 )
@@ -109,7 +109,7 @@ class OpenAIService:
         gpt_client.history_chat.append(
             {
                 'role': 'user',
-                'content': quest_answer_dicts
+                'content': text_open_question_answers(quest_answer_dicts)
             }
         )
         completion = gpt_client.chat.completions.create(
@@ -123,3 +123,6 @@ class OpenAIService:
         raw_response = completion.choices[0].message.content
         dict_response = json.loads(raw_response)  # todo: обработчик ошибок try-except
         return dict_response
+
+
+openAI = OpenAIService()

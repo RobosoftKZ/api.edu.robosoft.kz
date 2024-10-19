@@ -82,3 +82,5 @@ def text_open_question_answers(quest_answer_dicts: list):
         question = f"Вопрос: {quest_answer['question']}\n"
         answer = f"Ответ: {quest_answer['user_answer']}\n\n"
         prompt += question + answer
+
+    return prompt

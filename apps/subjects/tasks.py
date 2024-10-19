@@ -2,16 +2,14 @@ import logging
 
 from celery import shared_task
 
-from apps.subjects.services.generate_questions import OpenAIService
+from apps.subjects.services.generate_questions import openAI as openai_service
 from .models import Question, Subjects, SubjectChoices, WrongAnswer
-
-openai_service = OpenAIService()
 
 
 @shared_task
 def generate_questions_for_user(user_id, subject_id=None):
     if subject_id is None:
-        subject = Subjects.objects.filter(slug=SubjectChoices.RUSSIAN).first()
+        subject = Subjects.objects.filter(slug=SubjectChoices.MATH).first()
         if subject:
             subject_id = subject.id
     else:

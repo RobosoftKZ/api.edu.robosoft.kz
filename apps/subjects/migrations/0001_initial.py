@@ -20,11 +20,6 @@ def add_subjects_and_metrics(apps, schema_editor):
     math_statistics = SubjectMetrics.objects.create(name='Статистика')
     math_percentages = SubjectMetrics.objects.create(name='Проценты')
 
-    # Создаем метрики для Қазақ тілі
-    kaz_morphology = SubjectMetrics.objects.create(name='Морфология')
-    kaz_stylistics = SubjectMetrics.objects.create(name='Стилистика')
-    kaz_phonetics = SubjectMetrics.objects.create(name='Фонетика')
-
     # Создаем предметы и связываем их с метриками
     russian_language = Subjects.objects.create(name='Русский язык', slug='russian', open_questions_count=10,
                                                close_questions_count=5)
@@ -35,7 +30,7 @@ def add_subjects_and_metrics(apps, schema_editor):
 
     kazakh_language = Subjects.objects.create(name='Қазақ тілі', slug='kazakh', open_questions_count=10,
                                               close_questions_count=5)
-    kazakh_language.metrics.set([kaz_morphology, kaz_stylistics, kaz_phonetics])
+    kazakh_language.metrics.set([rus_morphology, rus_stylistics, rus_phonetics])
 
 
 class Migration(migrations.Migration):
