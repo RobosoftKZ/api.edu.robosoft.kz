@@ -2,8 +2,10 @@
 """Base settings to build other settings files upon."""
 
 from pathlib import Path
-
+from dotenv import load_dotenv
 import environ
+import os
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # apps/
@@ -14,6 +16,8 @@ READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(BASE_DIR / ".env"))
+
+GPT_API_KEY = os.environ.get("GPT_API_KEY", "")
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -86,6 +90,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "apps.users",
+    "apps.subjects",
+    
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
