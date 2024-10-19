@@ -1,6 +1,6 @@
 from apps.subjects.adapters.gpt_client import client as gpt_client
-from apps.subjects.adapters.gpt_client import prompt_for_russian_language
-from apps.subjects.models import RussianLanguage
+from apps.subjects.adapters.gpt_client import prompt_for_russian_language, prompt_for_math
+from apps.subjects.models import RussianLanguage, Math
 import json
 
 
@@ -34,3 +34,32 @@ class OpenAIService:
         
         return dict_response
     
+    def generate_math_questions(self, user_id):
+        gpt_client.history_chat = [{"content": prompt_for_math, "role":"system"}]
+        user_performance = Math.objects.filter(user_id=user_id) 
+
+        if user_performance:
+            arithmetic = user_performance.math_arithmetic
+            statistics = user_performance.math_statistics
+            percentage = user_performance.math_percentage
+        
+
+        gpt_client.history_chat.append(
+            {
+                'role': 'user',
+                'content': f'Параметр: арифметика\nУспешность ученика: {arithmetic}%\n\nПараметр: статистиика\nУспешность ученика: {statistics}%\n\nПараметр: фонетика\nУспешность ученика: {percentage}%'
+            }
+        )
+
+        completion = gpt_client.chat.completions.create(
+            model='gpt-4',
+            messages = gpt_client.history_chat,
+            response_format={"type": "json_object"},
+        )
+
+        gpt_client.history_chat.pop()
+        dict_response =dict()
+        raw_response = completion.choices[0].message.content
+        dict_response=json.loads(raw_response)     # todo: обработчик ошибок try-except 
+        
+        return dict_response

@@ -6,3 +6,9 @@ class RussianLanguage(models.Model):
     rus_morphology = models.FloatField()
     rus_stylistics = models.FloatField()
     rus_phonetics = models.FloatField()
+
+class Math(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    math_arithmetic = models.FloatField()
+    math_statistics = models.FloatField()
+    math_percentage = models.FloatField()
