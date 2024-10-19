@@ -51,6 +51,7 @@ class UsernameCheckerAPIView(APIView):
 
 class LoginRegisterAPIView(APIView):
     serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
