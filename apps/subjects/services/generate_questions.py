@@ -1,9 +1,16 @@
+# from apps.subjects.adapters.gpt_client import client as gpt_client
+# import json
+# from apps.subjects.adapters.gpt_client import get_prompts_for_subjects
+# from apps.subjects.models import Report
+
+
 class OpenAIService:
     def generate_questions(self, user_id, subject_id,
-                           subject_name, metrics, open_question_count=0, close_question_count=10):
+                           subject_name, metrics, open_question_count=3, close_question_count=7):
         # gpt_client.history_chat = [
         #     {
-        #         "content": get_prompts_for_subjects(subject_name, metrics, open_question_count, close_question_count),
+        #         "content": get_prompts_for_subjects(subject_name, metrics, open_question_count=open_question_count,
+        #                                             close_question_count=close_question_count),
         #         "role": "system"
         #     }
         # ]
