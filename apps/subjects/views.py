@@ -108,7 +108,7 @@ class AnswerSubmissionView(APIView):
                     report.metrics.add(report_metric)  # Связываем метрику с отчетом
                 except SubjectMetrics.DoesNotExist:
                     logging.error(f"Метрика {metric_name} не найдена.")
-            # Question.objects.filter(user=request.user, subject=subject).delete()
+            Question.objects.filter(user=request.user, subject=subject).delete()
             return Response({"correct_answers_count": correct_answers_count}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
