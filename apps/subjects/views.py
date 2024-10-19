@@ -6,8 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.subjects.models import Question, Subjects, SubjectChoices, WrongAnswer, Report, ReportMetrics, SubjectMetrics
-from apps.subjects.serializers import QuestionSerializers, AnswerSubmissionSerializer
+from apps.subjects.models import (
+    Question, Subjects, SubjectChoices, WrongAnswer, Report, ReportMetrics, SubjectMetrics
+)
+from apps.subjects.serializers import QuestionSerializers, AnswerSubmissionSerializer, SubjectSerializer
 from apps.subjects.services.generate_questions import OpenAIService
 from apps.subjects.tasks import generate_questions_for_user
 
@@ -22,7 +24,7 @@ class GenerateQuestionAPIView(generics.ListAPIView):
     def get_queryset(self):
         subject_id = self.request.query_params.get('subject_id', None)
         if subject_id is None:
-            subject = Subjects.objects.filter(slug=SubjectChoices.MATH).first()
+            subject = Subjects.objects.filter(slug=SubjectChoices.RUSSIAN).first()
             if subject:
                 subject_id = subject.id
         queryset = Question.objects.filter(
@@ -111,3 +113,15 @@ class AnswerSubmissionView(APIView):
             return Response({"correct_answers_count": correct_answers_count}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SubjectsViewSet(generics.ListAPIView):
+    queryset = Subjects.objects.all()
+    serializer_class = SubjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer_context(self):
+        # Добавляем контекст с запросом, чтобы передать user_id
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
