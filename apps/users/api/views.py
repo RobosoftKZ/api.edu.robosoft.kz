@@ -3,14 +3,13 @@ from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.mixins import UpdateModelMixin
-from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from apps.users.models import User
-
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UsernameSerializer
 
 
 class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
@@ -29,7 +28,9 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
 
 
 class UsernameCheckerAPIView(APIView):
+    serializer_class = UsernameSerializer
     permission_classes = [AllowAny]
+
     def post(self, request):
         # Получаем имя пользователя из запроса
         username = request.data.get("username")
