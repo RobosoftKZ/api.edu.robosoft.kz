@@ -17,8 +17,6 @@ class UsernameSerializer(serializers.Serializer):
     username = serializers.CharField()
 
 
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
+class RegisterSerializer(serializers.Serializer):
+    username = serializers.CharField(default="username")
+    password = serializers.CharField(default="password")
