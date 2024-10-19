@@ -17,3 +17,12 @@ class QuestionSerializers(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = "__all__"
+
+
+class UserAnswerSerializer(serializers.Serializer):
+    question_id = serializers.IntegerField()
+    userAnswer = serializers.CharField()
+
+
+class AnswerSubmissionSerializer(serializers.Serializer):
+    answers = UserAnswerSerializer(many=True)

@@ -25,6 +25,6 @@ class SubjectsAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    ...
+    list_display = ["id", "user", "subject", "question"]
 
 # Register your models here.

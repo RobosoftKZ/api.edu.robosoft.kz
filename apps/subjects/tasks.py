@@ -11,7 +11,7 @@ openai_service = OpenAIService()
 @shared_task
 def generate_questions_for_user(user_id, subject_id=None):
     if subject_id is None:
-        subject = Subjects.objects.filter(slug=SubjectChoices.RUSSIAN).first()
+        subject = Subjects.objects.filter(slug=SubjectChoices.MATH).first()
         if subject:
             subject_id = subject.id
     else:
@@ -23,7 +23,6 @@ def generate_questions_for_user(user_id, subject_id=None):
     if questions.count() < 10:
         # Считаем, сколько вопросов еще нужно сгенерировать
         needed_questions = 10 - questions.count()
-
         # Вызываем метод генерации вопросов
         generated_questions = openai_service.generate_questions(
             user_id=user_id,

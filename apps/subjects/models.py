@@ -26,7 +26,7 @@ class Subjects(models.Model):
     close_questions_count = models.SmallIntegerField()
 
     def __str__(self):
-        return f"{self.name} | {self.slug}"
+        return f"{self.name}"
 
 
 class ReportMetrics(models.Model):

@@ -1,7 +1,9 @@
-# from apps.subjects.adapters.gpt_client import client as gpt_client
-# import json
-# from apps.subjects.adapters.gpt_client import get_prompts_for_subjects
-# from apps.subjects.models import Report
+import json
+
+from apps.subjects.adapters.gpt_client import client as gpt_client
+from apps.subjects.adapters.gpt_client import (
+    get_prompt_for_getting_answer_quality
+)
 
 
 class OpenAIService:
@@ -95,4 +97,29 @@ class OpenAIService:
                                          'topic': 'Стилистика',
                                          'answer': ''}}
 
+        return dict_response
+
+    def calculate_anwers(self, quest_answer_dicts):
+        gpt_client.history_chat = [
+            {
+                "content": get_prompt_for_getting_answer_quality(),
+                "role": "system"
+            }
+        ]
+        gpt_client.history_chat.append(
+            {
+                'role': 'user',
+                'content': quest_answer_dicts
+            }
+        )
+        completion = gpt_client.chat.completions.create(
+            model='gpt-4o-mini',
+            messages=gpt_client.history_chat,
+            response_format={"type": "json_object"}
+        )
+
+        gpt_client.history_chat.pop()
+
+        raw_response = completion.choices[0].message.content
+        dict_response = json.loads(raw_response)  # todo: обработчик ошибок try-except
         return dict_response

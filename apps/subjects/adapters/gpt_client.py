@@ -50,5 +50,35 @@ def get_prompts_for_subjects(subject: str, metrics: list, open_question_count=3,
     Отвечать надо сразу здесь, без откладывания
     """
     all_prompt = subjects_text + individual_prompt + parameters + answer_format
-    print(all_prompt)
     return all_prompt
+
+
+def get_prompt_for_getting_answer_quality():
+    prompt = """
+    Помоги мне оценить ответы учеников 7 класса на вопросы о русском языке. Если ответ ученика является правильным, то дай 1 балл, а если нет, то 0.
+
+Я тебе скину вопросы в формате:
+
+Вопрос: Что такое стилистика в языке?
+Ответ: Стилистика изучает различные стили и выразительные средства языка
+
+Вопрос: Объясните, что такое морфология
+Ответ: Морфология - это раздел лингвистики, изучающий структуру и состав слов
+
+Отвечай строго в Json формате:
+marks:[
+1,1
+]
+
+где 1 - это правильный ответ, а 0 - неправильный. Получается, я отправил два правильных овтета на вопрос, и твой ответ - два балла в списке. Если все понял и готов, ответь "true".
+"""
+
+    return prompt
+
+
+def text_open_question_answers(quest_answer_dicts: list):
+    prompt = ""
+    for quest_answer in quest_answer_dicts:
+        question = f"Вопрос: {quest_answer['question']}\n"
+        answer = f"Ответ: {quest_answer['user_answer']}\n\n"
+        prompt += question + answer
