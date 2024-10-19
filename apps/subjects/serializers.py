@@ -47,7 +47,7 @@ class SubjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subjects
-        fields = ['name', 'metrics']
+        fields = ['id', 'name', 'metrics']
 
     def get_metrics(self, obj):
         request = self.context.get('request')
