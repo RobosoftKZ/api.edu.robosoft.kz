@@ -181,10 +181,3 @@ SPECTACULAR_SETTINGS["SERVERS"] = [
 ]
 # Your stuff...
 # ------------------------------------------------------------------------------
-CORS_ALLOWD_ORIGINS = [
-    "http://localhost:5173",
-    "https://edu.robosoft.kz",
-]
-CSRF_TRUSTED_ORIGINS = [
-    'https://edu.robosoft.kz',
-]

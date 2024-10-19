@@ -392,3 +392,12 @@ JAZZMIN_UI_TWEAKS = {
         }]
     },
 }
+CORS_ALLOWD_ORIGINS = [
+    "http://localhost:5173/",
+    "https://edu.robosoft.kz",
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://edu.robosoft.kz',
+]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
