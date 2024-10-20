@@ -66,7 +66,7 @@ class Report(models.Model):
         for metric in metrics_data:
             metric_name = metric['metric__name']
             avg_value = metric['average_value']
-            result[metric_name] = avg_value
+            result[metric_name] = round(avg_value, 1)
 
         return result
 

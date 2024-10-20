@@ -50,7 +50,11 @@ def get_prompts_for_subjects(subject: str, metrics: list, open_question_count=3,
     Отвечать надо сразу здесь, без откладывания
     """
     all_prompt = subjects_text + individual_prompt + parameters + answer_format
-    return all_prompt
+    
+    kazakh_additional =  """
+Так как ты генерируешь вопросы для предмета казахского языка, то они должны быть строго на соответствующем языке, русский либо какие либо другие языки допускаться не могут! Также ненужно добвалять topic в начало вопроса             
+"""
+    return all_prompt + kazakh_additional if subject.lower() == 'казахский язык' else all_prompt
 
 
 def get_prompt_for_getting_answer_quality():
